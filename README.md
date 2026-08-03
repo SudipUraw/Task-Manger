@@ -156,9 +156,3 @@ npm run start
 cd frontend
 npm run build
 ```
-
-## Notes
-
-- The app currently follows a split-service architecture rather than a single root server.
-- Normal development uses one terminal for the backend and another terminal for the frontend.
-- The dashboard UI includes search, status filtering, task cards, and completion statistics.
