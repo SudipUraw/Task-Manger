@@ -1,171 +1,107 @@
-# MERN Stack Task Manager Application
+# Task Manager
 
-A modern, full-stack Task Management Web Application built using MongoDB, Express.js, React, and Node.js (MERN stack) with Tailwind CSS for clean UI styling and JWT for user authentication.
+A full-stack task management app built with React, Vite, Express, TypeScript, and MongoDB Atlas. The current project runs from a single root server and serves the frontend through Vite middleware in development.
 
----
+## Features
 
-## 🚀 Features
+- Secure user registration and login
+- JWT-based authenticated routes
+- Protected task CRUD flows
+- Search and status filtering
+- Dashboard statistics and task overview
+- MongoDB Atlas support with an in-memory preview fallback
 
-- **User Authentication**:
-  - Secure Registration & Login with bcrypt password hashing
-  - JWT (JSON Web Token) authentication stored in `localStorage`
-  - Protected API routes and client-side route guards
-  - User profile display & logout functionality
-- **Task Management (CRUD)**:
-  - Create new tasks with title, description, due date, and status
-  - View tasks organized cleanly on a modern dashboard
-  - Edit task details
-  - Delete tasks
-  - Quick toggle task status between **Pending** and **Completed**
-- **Search & Filtering**:
-  - Real-time task search by title or description
-  - Filter tasks by status (**All**, **Pending**, **Completed**)
-- **Dashboard Overview**:
-  - Personal welcome greeting
-  - Task statistics summary cards (Total Tasks, Completed Tasks, Pending Tasks)
-  - Recent tasks view
-- **Handcrafted UI/UX**:
-  - Responsive layout for desktop and mobile
-  - Soft shadows, rounded cards, and clean typography
-  - Toast notifications for user feedback
-  - Loading skeletons, empty state displays, and error handling
+## Tech Stack
 
----
+- Frontend: React, Vite, React Router, Axios, Tailwind-style UI
+- Backend: Express, TypeScript, Mongoose, JWT, bcryptjs
+- Database: MongoDB Atlas
 
-## 🛠️ Tech Stack
+## Current Project Structure
 
-### Frontend
-- **React (Vite)**
-- **React Router DOM v7**
-- **Axios** for HTTP API calls
-- **Tailwind CSS** for responsive styling
-- **Lucide React** for icons
-
-### Backend
-- **Node.js** & **Express.js**
-- **MongoDB Atlas** & **Mongoose** ORM
-- **JSON Web Token (JWT)**
-- **bcryptjs** for password encryption
-- **cors** & **dotenv**
-
----
-
-## 📁 Folder Structure
-
-```
+```text
 Task-Manager/
-│
-├── backend/
-│   ├── config/
-│   │   └── db.js
-│   ├── controllers/
-│   │   ├── authController.js
-│   │   └── taskController.js
-│   ├── middleware/
-│   │   └── authMiddleware.js
-│   ├── models/
-│   │   ├── User.js
-│   │   └── Task.js
-│   ├── routes/
-│   │   ├── authRoutes.js
-│   │   └── taskRoutes.js
-│   ├── server.js
-│   ├── package.json
-│   └── .env
-│
-├── frontend/
-│   ├── src/
-│   │   ├── components/
-│   │   ├── pages/
-│   │   ├── services/
-│   │   ├── App.jsx
-│   │   └── main.jsx
-│   ├── package.json
-│   └── .env
-│
-├── .gitignore
+├── src/
+│   ├── App.tsx
+│   ├── main.tsx
+│   ├── index.css
+│   ├── backend/
+│   │   ├── config/
+│   │   ├── controllers/
+│   │   ├── middleware/
+│   │   ├── models/
+│   │   └── routes/
+│   ├── components/
+│   ├── context/
+│   ├── pages/
+│   └── services/
+├── server.ts
+├── .env.example
+├── package.json
 └── README.md
 ```
 
----
+## Important Notes
 
-## ⚙️ Environment Variables
+- The active runtime is the root server in [server.ts](server.ts).
+- The frontend source is under [src](src).
+- The backend implementation used by the running app is under [src/backend](src/backend).
+- Legacy duplicate folders such as the old standalone JavaScript backend and the split frontend workspace are no longer part of the active runtime.
 
-### Backend (`backend/.env`)
+## Environment Variables
+
+Create a root `.env` file from the sample in `.env.example`:
+
 ```env
-PORT=5000
+PORT=3000
 MONGODB_URI=your_mongodb_atlas_connection_string
 JWT_SECRET=your_secret_key
+VITE_API_URL=/api
 ```
 
-### Frontend (`frontend/.env`)
-```env
-VITE_API_URL=http://localhost:5000/api
-```
+## Run the App
 
----
+Install dependencies:
 
-## 💻 Local Installation & Setup Steps
-
-### 1. Clone the Repository
 ```bash
-git clone <YOUR_REPOSITORY_URL>
-cd Task-Manager
-```
-
-### 2. Setup & Run Backend
-```bash
-cd backend
 npm install
+```
+
+Start the development app:
+
+```bash
 npm run dev
 ```
-> The backend server will start on `http://localhost:5000`.
 
-### 3. Setup & Run Frontend
-In a new terminal window:
-```bash
-cd frontend
-npm install
-npm run dev
+The app will run at:
+
+```text
+http://localhost:3000
 ```
-> The React development server will start on `http://localhost:3000`.
 
----
+## Production Build
 
-## 🔌 API Overview
+```bash
+npm run build
+npm run start
+```
 
-### Authentication
-- `POST /api/auth/register` - Register a new user
-- `POST /api/auth/login` - Authenticate user & receive JWT token
-- `GET /api/auth/profile` - Get authenticated user profile (Protected)
+## API Overview
+
+### Auth
+- `POST /api/auth/register`
+- `POST /api/auth/login`
+- `GET /api/auth/profile`
 
 ### Tasks
-- `GET /api/tasks?search=&status=` - Get user tasks with search & filter options (Protected)
-- `POST /api/tasks` - Create a new task (Protected)
-- `PUT /api/tasks/:id` - Update task details (Protected)
-- `DELETE /api/tasks/:id` - Delete a task (Protected)
-- `PATCH /api/tasks/:id/status` - Quick update task status (Protected)
+- `GET /api/tasks`
+- `POST /api/tasks`
+- `PUT /api/tasks/:id`
+- `DELETE /api/tasks/:id`
+- `PATCH /api/tasks/:id/status`
 
----
+## Notes
 
-## 📤 Git & GitHub Commands
-
-To initialize and push this project to your GitHub repository:
-
-```bash
-git init
-git add .
-git commit -m "Initial commit"
-git branch -M main
-git remote add origin <YOUR_REPOSITORY_URL>
-git push -u origin main
-```
-
----
-
-## 🔮 Future Improvements
-
-- Add task priority levels (High, Medium, Low)
-- Implement category/tagging system
-- Add user profile avatar uploads
-- Email reminders for due tasks
+- In development, the server uses Vite middleware to serve the React app.
+- If `MONGODB_URI` is missing, the app will gracefully fall back to its in-memory preview database mode.
+- The actual environment file for the current app should live at the repository root as `.env`.

@@ -7,14 +7,16 @@ import { connectDB, getDbStatus } from './src/backend/config/db';
 import authRoutes from './src/backend/routes/authRoutes';
 import taskRoutes from './src/backend/routes/taskRoutes';
 
-dotenv.config();
+dotenv.config({ path: path.resolve(process.cwd(), '.env') });
+dotenv.config({ path: path.resolve(process.cwd(), '.env.local') });
+dotenv.config({ path: path.resolve(process.cwd(), 'backend/.env') });
 
 async function startServer() {
   // Connect to Database
   await connectDB();
 
   const app = express();
-  const PORT = 3000;
+  const PORT = Number(process.env.PORT) || 3000;
 
   // Middleware
   app.use(cors());
@@ -49,7 +51,7 @@ async function startServer() {
   }
 
   app.listen(PORT, '0.0.0.0', () => {
-    console.log(`🚀 Task Manager server running on http://0.0.0.0:${PORT}`);
+    console.log(`Task Manager server running on http://0.0.0.0:${PORT}`);
   });
 }
 

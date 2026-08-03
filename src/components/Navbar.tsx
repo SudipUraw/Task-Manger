@@ -2,12 +2,10 @@ import React, { useState } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { CheckSquare, LogOut, Database } from 'lucide-react';
 import { useToast } from '../context/ToastContext';
-import { MongoGuideModal } from './MongoGuideModal';
 
 export const Navbar: React.FC = () => {
   const { user, logout } = useAuth();
   const { showToast } = useToast();
-  const [showMongoModal, setShowMongoModal] = useState(false);
 
   const handleLogout = () => {
     logout();
@@ -25,22 +23,11 @@ export const Navbar: React.FC = () => {
             </div>
             <div>
               <span className="text-xl font-bold tracking-tight text-slate-800">TaskMaster</span>
-              <span className="hidden sm:inline-block ml-2 text border border-slate-200 text-slate-500 text-[11px] font-semibold px-2 py-0.5 rounded-md bg-slate-50">
-                MERN Stack
-              </span>
             </div>
           </div>
 
           {/* DB Status Guide & User Actions */}
           <div className="flex items-center gap-3">
-            <button
-              onClick={() => setShowMongoModal(true)}
-              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200 hover:bg-emerald-100 transition-colors"
-              title="MongoDB Atlas Status & Guide"
-            >
-              <Database className="w-3.5 h-3.5" />
-              <span className="hidden md:inline">MongoDB Guide</span>
-            </button>
 
             {user && (
               <>
@@ -68,7 +55,6 @@ export const Navbar: React.FC = () => {
         </div>
       </header>
 
-      <MongoGuideModal isOpen={showMongoModal} onClose={() => setShowMongoModal(false)} />
     </>
   );
 };
