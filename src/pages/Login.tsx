@@ -38,11 +38,6 @@ export const Login: React.FC = () => {
     }
   };
 
-  const handleFillDemo = () => {
-    setEmail('student@example.com');
-    setPassword('password123');
-  };
-
   return (
     <div className="min-h-screen bg-slate-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
       <div className="sm:mx-auto sm:w-full sm:max-w-md text-center">
@@ -126,20 +121,6 @@ export const Login: React.FC = () => {
               )}
             </button>
           </form>
-
-          {/* Quick Demo Login Helper */}
-          <div className="mt-6 pt-5 border-t border-slate-100 flex flex-col items-center gap-3">
-            <button
-              type="button"
-              onClick={handleFillDemo}
-              className="text-xs font-semibold text-blue-600 hover:text-blue-800 underline decoration-blue-200"
-            >
-              ⚡ Click to fill demo account credentials
-            </button>
-            <p className="text-xs text-slate-500">
-              Demo: <code className="bg-slate-100 px-1.5 py-0.5 rounded text-slate-700">student@example.com</code> / <code className="bg-slate-100 px-1.5 py-0.5 rounded text-slate-700">password123</code>
-            </p>
-          </div>
 
           <div className="mt-6 text-center">
             <p className="text-sm text-slate-600">
