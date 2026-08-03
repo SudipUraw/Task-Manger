@@ -1,107 +1,164 @@
 # Task Manager
 
-A full-stack task management app built with React, Vite, Express, TypeScript, and MongoDB Atlas. The current project runs from a single root server and serves the frontend through Vite middleware in development.
+A full-stack task management application with a React + Vite frontend and a TypeScript + Express backend. The project is designed as two independently runnable services that communicate through HTTP APIs.
 
-## Features
+## Overview
 
-- Secure user registration and login
-- JWT-based authenticated routes
-- Protected task CRUD flows
-- Search and status filtering
-- Dashboard statistics and task overview
-- MongoDB Atlas support with an in-memory preview fallback
+This repository currently contains:
+
+- A secure authentication flow with registration, login, and JWT-protected profile access
+- A task dashboard for creating, editing, deleting, searching, and filtering tasks
+- A backend that can use either MongoDB Atlas or an in-memory fallback store for local preview/development use
+- A frontend that renders protected routes and consumes the API through a shared Axios client
 
 ## Tech Stack
 
-- Frontend: React, Vite, React Router, Axios, Tailwind-style UI
-- Backend: Express, TypeScript, Mongoose, JWT, bcryptjs
-- Database: MongoDB Atlas
+### Frontend
+- React 19
+- Vite 6
+- React Router
+- Axios
+- Tailwind CSS
+- Lucide icons
+
+### Backend
+- Express 4
+- TypeScript
+- Mongoose
+- MongoDB Atlas support
+- JWT authentication using `jsonwebtoken`
+- Password hashing using `bcryptjs`
+- In-memory store fallback for environments where `MONGODB_URI` is not configured
 
 ## Current Project Structure
 
 ```text
 Task-Manager/
-├── src/
-│   ├── App.tsx
-│   ├── main.tsx
-│   ├── index.css
-│   ├── backend/
-│   │   ├── config/
-│   │   ├── controllers/
-│   │   ├── middleware/
-│   │   ├── models/
-│   │   └── routes/
-│   ├── components/
-│   ├── context/
-│   ├── pages/
-│   └── services/
-├── server.ts
-├── .env.example
-├── package.json
+├── backend/
+│   ├── .env.example
+│   ├── config/
+│   │   ├── db.ts
+│   │   └── memoryStore.ts
+│   ├── controllers/
+│   │   ├── authController.ts
+│   │   └── taskController.ts
+│   ├── middleware/
+│   │   └── authMiddleware.ts
+│   ├── models/
+│   │   ├── Task.ts
+│   │   └── User.ts
+│   ├── routes/
+│   │   ├── authRoutes.ts
+│   │   └── taskRoutes.ts
+│   ├── package.json
+│   └── server.ts
+├── frontend/
+│   ├── index.html
+│   ├── package.json
+│   ├── vite.config.ts
+│   └── src/
+│       ├── App.tsx
+│       ├── components/
+│       ├── context/
+│       ├── pages/
+│       ├── services/
+│       ├── index.css
+│       └── main.tsx
 └── README.md
 ```
 
-## Important Notes
+## Environment Setup
 
-- The active runtime is the root server in [server.ts](server.ts).
-- The frontend source is under [src](src).
-- The backend implementation used by the running app is under [src/backend](src/backend).
-- Legacy duplicate folders such as the old standalone JavaScript backend and the split frontend workspace are no longer part of the active runtime.
+### Backend environment
 
-## Environment Variables
-
-Create a root `.env` file from the sample in `.env.example`:
+Copy the sample file in [backend/.env.example](backend/.env.example) to a real environment file such as `backend/.env` and fill in the values.
 
 ```env
-PORT=3000
-MONGODB_URI=your_mongodb_atlas_connection_string
-JWT_SECRET=your_secret_key
+PORT=5000
+MONGODB_URI=mongodb+srv://<user>:<password>@cluster0.xxxxx.mongodb.net/task-manager
+JWT_SECRET=replace-with-a-long-random-secret
+```
+
+### Frontend environment
+
+The frontend reads `VITE_API_URL` from the Vite environment when present. In normal development, the Vite proxy forwards `/api` requests to the backend automatically.
+
+```env
 VITE_API_URL=/api
 ```
 
-## Run the App
+## Running the App
 
-Install dependencies:
+### 1. Install dependencies
 
 ```bash
-npm install
+cd backend && npm install
+cd ../frontend && npm install
 ```
 
-Start the development app:
+### 2. Start the backend
 
 ```bash
+cd backend
 npm run dev
 ```
 
-The app will run at:
+Backend server:
+- Runs on `http://localhost:5000`
+- Exposes `GET /api/health` and `GET /api/db-status`
 
-```text
-http://localhost:3000
-```
-
-## Production Build
+### 3. Start the frontend
 
 ```bash
+cd frontend
+npm run dev
+```
+
+Frontend app:
+- Runs on `http://localhost:3000`
+
+## API Endpoints
+
+### Authentication
+
+- `POST /api/auth/register`
+- `POST /api/auth/login`
+- `GET /api/auth/profile` (protected)
+
+### Tasks
+
+- `GET /api/tasks` (protected, supports `search` and `status` query params)
+- `POST /api/tasks` (protected)
+- `PUT /api/tasks/:id` (protected)
+- `DELETE /api/tasks/:id` (protected)
+- `PATCH /api/tasks/:id/status` (protected)
+
+## Behavior Notes
+
+- The backend initializes with `cors`, JSON parsing, and URL-encoded body support.
+- The frontend uses a central Axios instance in [frontend/src/services/api.ts](frontend/src/services/api.ts) to attach the JWT token from `localStorage`.
+- The Vite frontend proxy routes `/api/*` to `http://127.0.0.1:5000`, so the browser can use relative API paths during development.
+- If `MONGODB_URI` is missing or invalid, the backend automatically falls back to the in-memory store and continues working in preview/dev mode.
+
+## Build Commands
+
+### Backend
+
+```bash
+cd backend
 npm run build
 npm run start
 ```
 
-## API Overview
+### Frontend
 
-### Auth
-- `POST /api/auth/register`
-- `POST /api/auth/login`
-- `GET /api/auth/profile`
-
-### Tasks
-- `GET /api/tasks`
-- `POST /api/tasks`
-- `PUT /api/tasks/:id`
-- `DELETE /api/tasks/:id`
-- `PATCH /api/tasks/:id/status`
+```bash
+cd frontend
+npm run build
+```
 
 ## Notes
 
-- In development, the server uses Vite middleware to serve the React app.
-- If `MONGODB_URI` is missing, the app will gracefully fall back to its in-memory preview database mode.
-- The actual environment file for the current app should live at the repository root as `.env`.
+- The app currently follows a split-service architecture rather than a single root server.
+- Normal development uses one terminal for the backend and another terminal for the frontend.
+- The dashboard UI includes search, status filtering, task cards, and completion statistics.

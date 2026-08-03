@@ -1,6 +1,0 @@
-{
-  "name": "Task Manager",
-  "description": "A modern MERN Task Manager web application with JWT authentication, task CRUD, filtering, search, and dashboard statistics.",
-  "requestFramePermissions": [],
-  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
-}
